@@ -1,20 +1,10 @@
-import React, { Component } from 'react';
-import {
-  compose,
-  withState,
-} from 'recompose';
-import {
-  connect,
-} from 'react-redux';
-import logo from './logo.svg';
-import './App.css';
-import {
-  Tooltip,
-  withTooltip,
-} from './Tooltip';
-import {
-  contentSelector
-} from './state';
+import React, { Component } from "react";
+import { compose, withState } from "recompose";
+import { connect } from "react-redux";
+import logo from "./logo.svg";
+import "./App.css";
+import { Tooltip, withTooltip } from "./Tooltip";
+import { contentSelector } from "./state";
 
 const ManualPopover = ({ children, open, onRequestClose, content }) => {
   return (
@@ -39,9 +29,7 @@ class Menu extends React.Component {
     const { selected, children } = this.props;
 
     const PopoverContent = (
-      <div onClick={() => this.setState({ visible: false })}>
-        {children}
-      </div>
+      <div onClick={() => this.setState({ visible: false })}>{children}</div>
     );
 
     return (
@@ -50,11 +38,13 @@ class Menu extends React.Component {
           open={this.state.visible}
           content={PopoverContent}
           onRequestClose={() => {
-            console.log('triggered');
+            console.log("triggered");
             this.setState({ visible: false });
           }}
         >
-          <button onClick={e => this.setState({ visible: !this.state.visible })}>
+          <button
+            onClick={e => this.setState({ visible: !this.state.visible })}
+          >
             {selected}
           </button>
         </ManualPopover>
@@ -87,39 +77,31 @@ class Example extends React.Component {
   }
 }
 
+const NormalHeader = () => <h2>Normal component</h2>;
 
-const NormalHeader = () => (
-  <h2>Normal component</h2>
-);
-
-const Header = () => (
-  <h2>Component with tooltip</h2>
-);
+const Header = () => <h2>Component with tooltip</h2>;
 
 const HeaderWithTootip = withTooltip(Header, {
-  title: 'Welcome to React with tooltip',
+  title: "Welcome to React with tooltip",
+  tag: "a"
 });
 
-const mapStateToProps = (state) => ({
-  content: contentSelector(state),
+const mapStateToProps = state => ({
+  content: contentSelector(state)
 });
 
 class TooltipContentComponent extends Component {
   componentWillMount() {
-    console.log('mount now');
+    console.log("mount now");
   }
   componentWillUnmount() {
-    console.log('unmount now');
+    console.log("unmount now");
   }
 
   render() {
-    return (
-      <div>
-        TooltipContent here {this.props.content}
-      </div>
-    );
+    return <div>TooltipContent here {this.props.content}</div>;
   }
-};
+}
 
 const TooltipContent = connect(mapStateToProps)(TooltipContentComponent);
 
@@ -131,11 +113,16 @@ class App extends Component {
       disabled,
       setDisabled,
       open,
-      setIsOpen,
+      setIsOpen
     } = this.props;
     return (
       <div className="App">
-        <div className="App-header" onClick={() => {setDisabled(!disabled)}}>
+        <div
+          className="App-header"
+          onClick={() => {
+            setDisabled(!disabled);
+          }}
+        >
           <img src={logo} className="App-logo" alt="logo" />
         </div>
         <NormalHeader />
@@ -145,14 +132,22 @@ class App extends Component {
         <Tooltip
           // options
           title="Welcome to React"
+          tag="span"
+          trigger="mouseenter focus click"
+          duration={300}
+        >
+          <p>Hover here to show popup</p>
+        </Tooltip>
+        <hr />
+        <Tooltip
+          // options
+          title="Welcome to React"
           position="bottom"
           trigger="mouseenter"
           duration={3000}
           unmountHTMLWhenHide
         >
-          <p>
-            Hover here to show popup
-          </p>
+          <p>Hover here to show popup</p>
         </Tooltip>
         <hr />
         <Tooltip
@@ -160,7 +155,7 @@ class App extends Component {
           tabIndex={0}
           unmountHTMLWhenHide
           useContext
-          rawTemplate={document.querySelector('#rawHTML')}
+          rawTemplate={document.querySelector("#rawHTML")}
         >
           Raw html
         </Tooltip>
@@ -174,13 +169,18 @@ class App extends Component {
         >
           <p
             style={{
-              animation: 'hover 2s ease-in-out infinite',
+              animation: "hover 2s ease-in-out infinite"
             }}
           >
             Sticky
           </p>
         </Tooltip>
-        <button onClick={() => { console.log('call open'); setIsOpen(true) }}>
+        <button
+          onClick={() => {
+            console.log("call open");
+            setIsOpen(true);
+          }}
+        >
           Do something
         </button>
         <hr />
@@ -188,10 +188,20 @@ class App extends Component {
           disabled={disabled}
           title={tooltipContent}
           open={open}
-          onRequestClose={() => {console.log('call'); setIsOpen(false)}}
+          onRequestClose={() => {
+            console.log("call");
+            setIsOpen(false);
+          }}
         >
-          <span className="App-intro" onClick={() => { console.log('call open'); setIsOpen(true) }}>
-            Big Tooltip with dynamic content: {tooltipContent} {open.toString()} {disabled.toString()}
+          <span
+            className="App-intro"
+            onClick={() => {
+              console.log("call open");
+              setIsOpen(true);
+            }}
+          >
+            Big Tooltip with dynamic content: {tooltipContent} {open.toString()}{" "}
+            {disabled.toString()}
           </span>
         </Tooltip>
         <hr />
@@ -202,9 +212,7 @@ class App extends Component {
             tabIndex={0}
             unmountHTMLWhenHide
             useContext
-            html={(
-              <TooltipContent />
-            )}
+            html={<TooltipContent />}
           >
             Click here
           </Tooltip>
@@ -217,20 +225,20 @@ class App extends Component {
           position="right"
           animateFill={false}
           transitionFlip={false}
-          html={(
+          html={
             <div style={{ width: 400 }}>
               <p>{tooltipContent}</p>
               <input
                 type="text"
                 value={tooltipContent}
-                onChange={(e) => {setTooltipContent(e.target.value)}}
+                onChange={e => {
+                  setTooltipContent(e.target.value);
+                }}
               />
             </div>
-          )}
+          }
         >
-          <span className="App-intro" >
-            Interactive tooltip
-          </span>
+          <span className="App-intro">Interactive tooltip</span>
         </Tooltip>
 
         <Example />
@@ -240,9 +248,9 @@ class App extends Component {
 }
 
 const enhance = compose(
-  withState('tooltipContent', 'setTooltipContent', 'tooltipContent'),
-  withState('open', 'setIsOpen', false),
-  withState('disabled', 'setDisabled', false),
+  withState("tooltipContent", "setTooltipContent", "tooltipContent"),
+  withState("open", "setIsOpen", false),
+  withState("disabled", "setDisabled", false)
 );
 
 export default enhance(App);
